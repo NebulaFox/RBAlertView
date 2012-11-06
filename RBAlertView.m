@@ -4,14 +4,10 @@
 
 #import "RBAlertView.h"
 
-@implementation AppAlertView
-
-@synthesize cancelBlock = _cancelBlock;
-@synthesize clickedBlock = _clickedBlock;
+@implementation RBAlertView
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message
-  cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles
-        cancelBlock:(AppAlertViewCancalBlock)cancelBlock clickedButtonAtIndexBlock:(AppAlertViewClickedBlock)clickedBlock
+  cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles clickedBlock:(RBAlertViewWithButtonIndexBlock)clickedBlock
 {
     self = [super initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil];
     if ( self ) {
@@ -19,53 +15,108 @@
             [self addButtonWithTitle:title];
         }
         
-        if ( clickedBlock != nil ) {
-            _clickedBlock = clickedBlock;
-        }
-        
-        if ( cancelBlock != nil ) {
-            _cancelBlock = cancelBlock;
-        }
-        
-        if ( _clickedBlock || _cancelBlock ) {
-            [self setDelegate:self];
-        }
+        self.clickedBlock = clickedBlock;
+        self.delegate = self;
     }
     return self;
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
+    if ( [super respondsToSelector:aSelector] )
+    {
+        return YES;
+    }
+    else
+    {
+        if ( aSelector == @selector(alertViewCancel:) && self.cancelBlock != nil )
+        {
+            return YES;
+        }
+        else if ( aSelector == @selector(alertViewShouldEnableFirstOtherButton:) && self.shouldEnableFirstOtherButtonBlock != nil )
+        {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 #pragma - Delegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if ( _clickedBlock != NULL ) {
-        _clickedBlock(self, buttonIndex);
+    if ( self.clickedBlock != nil )
+    {
+        self.clickedBlock( self, buttonIndex );
     }
+}
+
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if ( self.willDismissBlock != nil )
+    {
+        self.willDismissBlock( self, buttonIndex );
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if ( self.didDismissBlock != nil )
+    {
+        self.didDismissBlock( self, buttonIndex );
+    }
+}
+
+- (void)willPresentAlertView:(UIAlertView *)alertView
+{
+    if ( self.willPresentBlock != nil )
+    {
+        self.willPresentBlock( self );
+    }
+}
+
+- (void)didPresentAlertView:(UIAlertView *)alertView
+{
+    if ( self.didPresentBlock != nil )
+    {
+        self.didPresentBlock( self );
+    }
+}
+
+- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
+{
+    // there is no checking if shouldEnableFirstOtheButtonBlock is nil
+    // because it will be handled by `respondToSelector:`
+    // the reason is to make life easier
+    return self.shouldEnableFirstOtherButtonBlock( self );
 }
 
 - (void)alertViewCancel:(UIAlertView *)alertView
 {
-    if ( _cancelBlock != NULL ) {
-        _cancelBlock(self);
-    }
+    // there is no checking if cancel block is nil
+    // because it will be handled by `respondToSelector:`
+    // the reason is action sheet will react differently
+    // if this method is defined
+    self.cancelBlock( self );
 }
 
 #pragma - Static
 
-+ (AppAlertView *)alertViewWithTitle:(NSString *)title message:(NSString *)message
++ (RBAlertView *)alertViewWithTitle:(NSString *)title message:(NSString *)message
 {
-    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:@"OK" otherButtonTitles:nil cancelBlock:NULL clickedButtonAtIndexBlock:NULL];
+    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:@"OK" otherButtonTitles:nil clickedBlock:nil];
 }
 
-+ (AppAlertView *)alertViewWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle cancelBlock:(AppAlertViewCancalBlock)cancelBlock
++ (RBAlertView *)alertViewWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle
 {
-    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil cancelBlock:cancelBlock clickedButtonAtIndexBlock:NULL];
+    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil clickedBlock:nil];
 }
-+ (AppAlertView *)alertViewWithTitle:(NSString *)title message:(NSString *)message
++ (RBAlertView *)alertViewWithTitle:(NSString *)title message:(NSString *)message
                    cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles
-                         cancelBlock:(AppAlertViewCancalBlock)cancelBlock clickedButtonAtIndexBlock:(AppAlertViewClickedBlock)clickedBlock
+                         clickedBlock:(RBAlertViewWithButtonIndexBlock)clickedBlock
 {
-    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles cancelBlock:cancelBlock clickedButtonAtIndexBlock:clickedBlock];
+    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles clickedBlock:clickedBlock];
 }
 
 @end
