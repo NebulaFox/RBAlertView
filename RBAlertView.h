@@ -7,13 +7,13 @@
 @class RBAlertView;
 
 /// the block type that will be passed an action sheet and a button index
-typedef void (^RBAlertViewWithButtonIndexBlock)(RBAlertView *, NSInteger);
+typedef void (^RBAlertViewWithButtonIndexBlock)(RBAlertView * alertView, NSInteger buttonIndex);
 
 /// the block type that will be passed an action sheet
-typedef void (^RBAlertViewBlock)(RBAlertView *);
+typedef void (^RBAlertViewBlock)(RBAlertView * alertView);
 
 /// the block type tha will be passed an action sheet and return a `BOOL`
-typedef BOOL (^RBAlertViewBoolBlock)(RBAlertView *);
+typedef BOOL (^RBAlertViewBoolBlock)(RBAlertView * alertView);
 
 /// Extends `UIAlertView` to handle delegation via blocks
 /**
@@ -48,6 +48,6 @@ clickedButtonAtIndexBlock:(RBAlertViewWithButtonIndexBlock)clickedBlock;
                             message:(NSString *)message
                   cancelButtonTitle:(NSString *)cancelButtonTitle
                   otherButtonTitles:(NSArray *)otherButtonTitles
-                       clickedBlock:(RBAlertViewWithButtonIndexBlock)clickedBlock;
+          clickedButtonAtIndexBlock:(RBAlertViewWithButtonIndexBlock)clickedBlock;
 
 @end

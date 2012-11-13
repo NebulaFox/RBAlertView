@@ -7,7 +7,7 @@
 @implementation RBAlertView
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message
-  cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles clickedBlock:(RBAlertViewWithButtonIndexBlock)clickedBlock
+  cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles clickedButtonAtIndexBlock:(RBAlertViewWithButtonIndexBlock)clickedBlock
 {
     self = [super initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil];
     if ( self ) {
@@ -105,18 +105,18 @@
 
 + (RBAlertView *)alertViewWithTitle:(NSString *)title message:(NSString *)message
 {
-    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:@"OK" otherButtonTitles:nil clickedBlock:nil];
+    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:@"OK" otherButtonTitles:nil clickedButtonAtIndexBlock:nil];
 }
 
 + (RBAlertView *)alertViewWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle
 {
-    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil clickedBlock:nil];
+    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil clickedButtonAtIndexBlock:nil];
 }
 + (RBAlertView *)alertViewWithTitle:(NSString *)title message:(NSString *)message
                    cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles
-                         clickedBlock:(RBAlertViewWithButtonIndexBlock)clickedBlock
+                         clickedButtonAtIndexBlock:(RBAlertViewWithButtonIndexBlock)clickedBlock
 {
-    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles clickedBlock:clickedBlock];
+    return [[self alloc] initWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles clickedButtonAtIndexBlock:clickedBlock];
 }
 
 @end
