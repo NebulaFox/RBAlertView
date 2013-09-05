@@ -22,13 +22,13 @@ typedef BOOL (^RBAlertViewBoolBlock)(RBAlertView * alertView);
  */
 @interface RBAlertView : UIAlertView <UIAlertViewDelegate>
 
-@property ( strong, nonatomic ) RBAlertViewWithButtonIndexBlock clickedBlock; ///< the block called on `alertView:clickedButtonAtIndex:`
-@property ( strong, nonatomic ) RBAlertViewWithButtonIndexBlock willDismissBlock; ///< the block called on `alertView:willDismissWithButtonIndex:`
-@property ( strong, nonatomic ) RBAlertViewWithButtonIndexBlock didDismissBlock; ///< the block called on `alertView:didDismissWithButtonIndex:`
-@property ( strong, nonatomic ) RBAlertViewBlock willPresentBlock; ///< the block called on `willPresentAlertView:`
-@property ( strong, nonatomic ) RBAlertViewBlock didPresentBlock; ///< the block called on `didPresentAlertView:`
-@property ( strong, nonatomic ) RBAlertViewBoolBlock shouldEnableFirstOtherButtonBlock; ///< the block called on `alertViewShouldEnableFirstOtherButton:`
-@property ( strong, nonatomic ) RBAlertViewBlock cancelBlock; ///< the block called on `alertViewCancel:`
+@property ( nonatomic, copy ) RBAlertViewWithButtonIndexBlock clickedBlock; ///< the block called on `alertView:clickedButtonAtIndex:`
+@property ( nonatomic, copy ) RBAlertViewWithButtonIndexBlock willDismissBlock; ///< the block called on `alertView:willDismissWithButtonIndex:`
+@property ( nonatomic, copy ) RBAlertViewWithButtonIndexBlock didDismissBlock; ///< the block called on `alertView:didDismissWithButtonIndex:`
+@property ( nonatomic, copy ) RBAlertViewBlock willPresentBlock; ///< the block called on `willPresentAlertView:`
+@property ( nonatomic, copy ) RBAlertViewBlock didPresentBlock; ///< the block called on `didPresentAlertView:`
+@property ( nonatomic, copy ) RBAlertViewBoolBlock shouldEnableFirstOtherButtonBlock; ///< the block called on `alertViewShouldEnableFirstOtherButton:`
+@property ( nonatomic, copy ) RBAlertViewBlock cancelBlock; ///< the block called on `alertViewCancel:`
 
 - (id)      initWithTitle:(NSString *)title
                   message:(NSString *)message
